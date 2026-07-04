@@ -282,6 +282,8 @@ La vista de caso de uso describe los escenarios principales que la arquitectura 
 #### 3.1.1. Diagramas de Casos de uso
 
 **Diagrama PlantUML – Casos de Uso Generales:**
+<img width="1031" height="1571" alt="Diagrama de casos de uso general" src="https://github.com/user-attachments/assets/5278b44f-8ce3-4743-a741-3a2dbe0e59a3" />
+
 
 ```plantuml
 @startuml CasosDeUso_MigradorDB_v2
@@ -400,6 +402,7 @@ La vista lógica describe la estructura de clases y paquetes del sistema.
 #### 3.2.1. Diagrama de Subsistemas (paquetes)
 
 **Diagrama PlantUML – Diagrama de Paquetes:**
+<img width="1308" height="832" alt="Diagrama de paquetes" src="https://github.com/user-attachments/assets/0eee7bae-5536-49b5-8e71-878c4947f15a" />
 
 ```plantuml
 @startuml Paquetes_MigradorDB_v2
@@ -496,6 +499,7 @@ Migrador DB Enterprise/
 ```
 
 #### 3.2.2. Diagrama de Secuencia – Proceso de Migración (ETL Web)
+<img width="1046" height="786" alt="Diagrama de secuencia(Migracion)" src="https://github.com/user-attachments/assets/7ba0a9da-de5d-4e4e-bef8-c6d38ce1d2d4" />
 
 ```plantuml
 @startuml Secuencia_ETL_Web
@@ -538,6 +542,7 @@ R --> U: archivo (descarga)
 ```
 
 **Diagrama de Secuencia – Migración vía Apache Airflow (Unidad 3):**
+<img width="805" height="695" alt="Diagrama de secuencia(Via Airflow)" src="https://github.com/user-attachments/assets/604fd810-cd51-438e-9881-2d603230f746" />
 
 ```plantuml
 @startuml Secuencia_Airflow
@@ -570,6 +575,7 @@ OP --> AS: Task SUCCESS
 ```
 
 **Diagrama de Secuencia – Migración vía Extensión VS Code (Unidad 3):**
+<img width="1001" height="791" alt="Diagrama de secuencia(Via VsCode)" src="https://github.com/user-attachments/assets/3f897bc9-819a-4791-8b96-9000fe3fa066" />
 
 ```plantuml
 @startuml Secuencia_VSCode
@@ -607,6 +613,7 @@ VSC --> DEV: Archivo migrado abierto en editor
 #### 3.2.3. Diagrama de Clases
 
 **Diagrama PlantUML – Diagrama de Clases Principal:**
+<img width="1390" height="1161" alt="Diagrama de clases" src="https://github.com/user-attachments/assets/48c6d6a8-33e1-4033-b74d-22596b50ab68" />
 
 ```plantuml
 @startuml Clases_MigradorDB_v2
@@ -790,84 +797,15 @@ El sistema utiliza dos bases de datos SQLite:
 
 La arquitectura se organiza en capas:
 
-```
-┌─────────────────────────────────────────────────┐
-│                 CAPA DE PRESENTACIÓN             │
-│  app/templates/ (HTML+Jinja2)                    │
-│  app/static/css/ + app/static/js/                │
-│  Flask-SocketIO (comunicación en tiempo real)    │
-└──────────────────────┬──────────────────────────┘
-                       │
-┌──────────────────────▼──────────────────────────┐
-│                 CAPA DE APLICACIÓN               │
-│  app/routes.py (Blueprint principal)             │
-│  app/auth.py (Autenticación y autorización)      │
-│  app/oauth.py (OAuth Google + GitHub)            │
-│  app/github_integration.py (GitHub API)          │
-│  app/models.py (Modelos de datos)                │
-│  config.py (Configuración Flask)                 │
-└──────────────────────┬──────────────────────────┘
-                       │
-┌──────────────────────▼──────────────────────────┐
-│                CAPA DE LÓGICA DE NEGOCIO (ETL)   │
-│  ┌──────────┐  ┌──────────────┐  ┌───────────┐  │
-│  │Extracción│→│Transformación│→│   Carga   │  │
-│  │conector  │  │  mapeador    │  │ cargador  │  │
-│  └──────────┘  └──────────────┘  └───────────┘  │
-│  utilidades/detector.py (Detección automática)   │
-└──────────────────────┬──────────────────────────┘
-                       │
-┌──────────────────────▼──────────────────────────┐
-│                 CAPA DE DATOS                    │
-│  SQLite (auth.db - autenticación)                │
-│  SQLite (migracion_<motor>.db - ETL intermedio)  │
-│  SQLAlchemy (ORM para acceso a datos)            │
-│  Pandas (manipulación de DataFrames)             │
-└─────────────────────────────────────────────────┘
-```
+
+<img width="2565" height="625" alt="Diagrama de arquitectura(paquetes)" src="https://github.com/user-attachments/assets/a7f9814a-06d6-4299-8254-bd584aee55e0" />
+
+
 
 #### 3.3.2. Diagrama de componentes
 
-```
-┌─────────────────────────────────────────────────────────┐
-│                      Navegador Web                       │
-│  ┌──────────┐  ┌─────────────┐  ┌──────────────────┐   │
-│  │ HTML/CSS │  │ JavaScript  │  │ Socket.IO Client │   │
-│  └──────────┘  └─────────────┘  └──────────────────┘   │
-└──────────────────────┬──────────────────────────────────┘
-                       │ HTTP / WebSocket
-┌──────────────────────▼──────────────────────────────────┐
-│                   Servidor Flask                         │
-│  ┌─────────────┐  ┌─────────────┐  ┌────────────────┐  │
-│  │   Routes    │  │    Auth     │  │     OAuth      │  │
-│  │ (Blueprint) │  │  (SQLite/  │  │ (Google/GitHub)│  │
-│  │             │  │   MySQL)   │  │   (Authlib)    │  │
-│  └──────┬──────┘  └─────────────┘  └────────────────┘  │
-│         │                                                │
-│  ┌──────▼──────────────────────────────────────────┐    │
-│  │              Pipeline ETL                        │    │
-│  │  ┌──────────┐  ┌────────────┐  ┌─────────────┐ │    │
-│  │  │Detector  │→│ConectorOrig│→│MapeadorDatos│ │    │
-│  │  │BaseDatos │  │   en       │  │             │ │    │
-│  │  └──────────┘  └────────────┘  └──────┬──────┘ │    │
-│  │                                        │        │    │
-│  │                               ┌────────▼──────┐ │    │
-│  │                               │CargadorDestino│ │    │
-│  │                               │ (.sql/.json/  │ │    │
-│  │                               │  .ndjson/.cql/│ │    │
-│  │                               │  .redis/.db)  │ │    │
-│  │                               └───────────────┘ │    │
-│  └─────────────────────────────────────────────────┘    │
-└──────────────────────┬──────────────────────────────────┘
-                       │
-         ┌─────────────┼──────────────┐
-         │             │              │
-    ┌────▼────┐  ┌─────▼─────┐  ┌────▼────┐
-    │ SQLite  │  │ GitHub API│  │  SMTP   │
-    │(auth.db)│  │(repos,    │  │(email   │
-    │         │  │ archivos) │  │verific.)│
-    └─────────┘  └───────────┘  └─────────┘
-```
+<img width="1444" height="672" alt="Diagrama de componentes" src="https://github.com/user-attachments/assets/82507a7d-0c5c-4b41-b53d-24ab523e5131" />
+
 
 <span id="vista-procesos"></span>
 ### 3.4. Vista de procesos
@@ -876,67 +814,13 @@ La arquitectura se organiza en capas:
 
 **Proceso 1: Detección automática de motor** (`utilidades/detector.py`)
 
-```
-Archivo subido
-      │
-      ▼
-┌─────────────┐    Sí    ┌──────────────┐
-│ ¿Es SQLite? │────────→│ Return SQLite │
-│(binary test)│          └──────────────┘
-└──────┬──────┘
-       │ No
-       ▼
-┌─────────────────┐   Sí   ┌───────────────────────┐
-│¿Contiene CREATE │───────→│Analizar sintaxis SQL: │
-│TABLE o INSERT?  │        │AUTO_INCREMENT → MySQL  │
-└──────┬──────────┘        │SERIAL → PostgreSQL    │
-       │ No                │IDENTITY → SQL Server  │
-       ▼                   │VARCHAR2 → Oracle      │
-┌─────────────────┐        │INT64 → BigQuery       │
-│¿Es JSON válido? │        │VARIANT → Snowflake    │
-│(array/object)   │        │DISTKEY → Redshift     │
-└──────┬──────────┘        └───────────────────────┘
-       │ No
-       ▼
-┌─────────────────┐
-│¿Es CSV/Excel?   │
-│(Pandas attempt)  │
-└──────┬──────────┘
-       │ No
-       ▼
-┌─────────────────┐
-│Fallback:        │
-│extensión archivo│
-└─────────────────┘
-```
+<img width="832" height="386" alt="proceso1" src="https://github.com/user-attachments/assets/ea279072-6d46-43e0-8d63-b959ec3cbe2b" />
+
 
 **Proceso 2: Pipeline ETL**
 
-```
-1. EXTRACCIÓN (ConectorOrigen)
-   ├── SQLite: SQLAlchemy inspect → tablas, columnas, PKs, FKs, índices
-   ├── SQL: Regex parsing → CREATE TABLE, INSERT INTO, CREATE VIEW/TRIGGER/PROC/FUNC
-   ├── JSON: json.load → documentos
-   ├── CSV: Pandas read_csv → DataFrame
-   └── Excel: Pandas read_excel → DataFrame por hoja
+<img width="1916" height="637" alt="proceso2" src="https://github.com/user-attachments/assets/16b9408f-5f18-443f-bf99-cc8e246b4584" />
 
-2. TRANSFORMACIÓN (MapeadorDatos)
-   ├── Normalizar nombres de columnas (espacios→_, guiones→_, puntos→_)
-   ├── Convertir tipos object → string
-   └── Eliminar filas completamente nulas
-
-3. CARGA (CargadorDestino)
-   ├── Crear SQLite intermedio
-   ├── Crear tablas con estructura traducida
-   ├── Insertar datos vía Pandas to_sql
-   ├── Almacenar objetos SQL (vistas, triggers, etc.)
-   └── Generar exportación final según motor:
-       ├── SQL: CREATE TABLE + INSERT INTO con tipos nativos
-       ├── JSON: metadata + collections
-       ├── NDJSON: índice + documento por línea
-       ├── CQL: CREATE TABLE + INSERT con PRIMARY KEY
-       └── Redis: HSET por fila
-```
 
 <span id="vista-despliegue"></span>
 ### 3.5. Vista de Despliegue (vista física)
@@ -945,53 +829,13 @@ Archivo subido
 
 **Entorno de Desarrollo (Local)**:
 
-```
-┌──────────────────────────────┐
-│      Equipo del Desarrollador │
-│  ┌────────────────────────┐  │
-│  │    Python 3.12+        │  │
-│  │    Flask (run.py)      │  │
-│  │    Puerto: 5000        │  │
-│  │    Modo: threading     │  │
-│  └────────────────────────┘  │
-│  ┌────────────────────────┐  │
-│  │    SQLite (auth.db)    │  │
-│  │    uploads/            │  │
-│  └────────────────────────┘  │
-└──────────────────────────────┘
-```
+<img width="782" height="236" alt="Diagrama de despliegue" src="https://github.com/user-attachments/assets/954c117f-fff3-4195-b390-8f4566cc419d" />
+
 
 **Entorno de Producción (VPS Ubuntu)**:
 
-```
-┌─────────────────────────────────────────────────────┐
-│                    VPS Ubuntu 22.04                   │
-│                                                       │
-│  ┌─────────────────────┐    ┌──────────────────────┐ │
-│  │      Nginx          │    │    Supervisor         │ │
-│  │  Puerto: 80/443     │    │  (gestión procesos)   │ │
-│  │  SSL: Let's Encrypt │    └──────────┬───────────┘ │
-│  │  Proxy → :5000      │               │             │
-│  └──────────┬──────────┘    ┌──────────▼───────────┐ │
-│             │               │ Gunicorn + Eventlet  │ │
-│             └──────────────→│ wsgi.py              │ │
-│                             │ Workers: 1 (eventlet)│ │
-│                             │ Puerto: 5000         │ │
-│                             └──────────────────────┘ │
-│                                                       │
-│  ┌──────────────────┐    ┌──────────────────────┐    │
-│  │  SQLite auth.db  │    │  uploads/ (archivos) │    │
-│  └──────────────────┘    └──────────────────────┘    │
-│                                                       │
-│  ── Servicios Externos ──                             │
-│  ├── Google OAuth (accounts.google.com)               │
-│  ├── GitHub OAuth (github.com/login/oauth)            │
-│  ├── GitHub API (api.github.com)                      │
-│  └── SMTP (smtp.gmail.com:587)                        │
-└───────────────────────────────────────────────────────┘
-```
+<img width="1399" height="603" alt="entorno de produccion(VPS)" src="https://github.com/user-attachments/assets/16473fe4-c63d-4921-bdc7-203c018c717d" />
 
----
 
 <span id="atributos-calidad"></span>
 ## 4. ATRIBUTOS DE CALIDAD DEL SOFTWARE
