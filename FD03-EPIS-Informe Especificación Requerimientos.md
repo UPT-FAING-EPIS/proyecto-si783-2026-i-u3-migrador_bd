@@ -512,6 +512,157 @@ El sistema está organizado en los siguientes paquetes/módulos:
 
 <img width="508" height="535" alt="Diagrama de caso de uso general" src="https://github.com/user-attachments/assets/06e05216-504a-4a26-a9da-a50944952b80" />
 
+**Diagramas Individuales por Caso de Uso:**
+
+**CU-01: Registrar cuenta**
+
+<img width="384" height="93" alt="cu1" src="https://github.com/user-attachments/assets/40e084f6-180c-4cf3-aa76-dc19cd9415ea" />
+
+
+**CU-02: Verificar email**
+
+<img width="371" height="204" alt="cu2" src="https://github.com/user-attachments/assets/c84bb14e-1a49-4495-b882-129bff1fcc1f" />
+
+
+**CU-03: Iniciar sesión**
+
+<img width="362" height="93" alt="cu3" src="https://github.com/user-attachments/assets/41487b64-879d-4545-8c12-7e424c6075db" />
+
+
+**CU-04: Login OAuth**
+
+<img width="396" height="204" alt="cu4" src="https://github.com/user-attachments/assets/5d82056d-7847-4629-8bd9-20ea4ae8f0f3" />
+
+
+**CU-05: Subir archivo BD**
+
+<img width="384" height="93" alt="cu5" src="https://github.com/user-attachments/assets/85ff6d57-8ac3-419a-9786-8914dbf4bdce" />
+
+
+**CU-06: Detectar motor**
+```plantuml
+@startuml
+left to right direction
+actor "Sistema" as Sys
+usecase "CU-06: Detectar motor" as CU06
+Sys --> CU06
+@enduml
+```
+
+**CU-07: Seleccionar destino**
+```plantuml
+@startuml
+left to right direction
+actor "Usuario Regular" as User
+usecase "CU-07: Seleccionar destino" as CU07
+User --> CU07
+@enduml
+```
+
+**CU-08: Ejecutar migración**
+```plantuml
+@startuml
+left to right direction
+actor "Sistema" as Sys
+usecase "CU-08: Ejecutar migración" as CU08
+Sys --> CU08
+@enduml
+```
+
+**CU-09: Descargar resultado**
+```plantuml
+@startuml
+left to right direction
+actor "Usuario Regular" as User
+usecase "CU-09: Descargar resultado" as CU09
+User --> CU09
+@enduml
+```
+
+**CU-10: Subir a GitHub**
+```plantuml
+@startuml
+left to right direction
+actor "Usuario Regular" as User
+usecase "CU-10: Subir a GitHub" as CU10
+User --> CU10
+@enduml
+```
+
+**CU-11: Ver historial**
+```plantuml
+@startuml
+left to right direction
+actor "Usuario Regular" as User
+usecase "CU-11: Ver historial" as CU11
+User --> CU11
+@enduml
+```
+
+**CU-12: Gestionar usuarios**
+```plantuml
+@startuml
+left to right direction
+actor "Administrador" as Admin
+usecase "CU-12: Gestionar usuarios" as CU12
+Admin --> CU12
+@enduml
+```
+
+**CU-13: Monitorear IPs**
+```plantuml
+@startuml
+left to right direction
+actor "Administrador" as Admin
+usecase "CU-13: Monitorear IPs" as CU13
+Admin --> CU13
+@enduml
+```
+
+**CU-14: Gestionar perfil**
+```plantuml
+@startuml
+left to right direction
+actor "Usuario Regular" as User
+usecase "CU-14: Gestionar perfil" as CU14
+User --> CU14
+@enduml
+```
+
+**CU-15: [U3] Definir tarea de migración en DAG**
+```plantuml
+@startuml
+left to right direction
+actor "Ingeniero de Datos\n(Airflow)" as Airflow
+usecase "CU-15: Definir tarea de migración en DAG" as CU15
+Airflow --> CU15
+@enduml
+```
+
+**CU-16: [U3] Ejecutar migración programada vía Airflow**
+```plantuml
+@startuml
+left to right direction
+actor "Sistema (Airflow)" as SysAirflow
+usecase "CU-16: Ejecutar migración programada" as CU16
+SysAirflow --> CU16
+@enduml
+```
+
+**CU-17: [U3] Migrar archivo desde VS Code**
+```plantuml
+@startuml
+left to right direction
+actor "Desarrollador (VS Code)" as Dev
+usecase "CU-17: Migrar archivo desde VS Code" as CU17
+Dev --> CU17
+@enduml
+```
+
+**CU-18: [U3] Recibir resultado en VS Code**
+<img width="518" height="93" alt="cu18" src="https://github.com/user-attachments/assets/1d46e467-1555-40d4-88c9-d916035ba221" />
+
+
 
 *(Nota: Se incluye un diagrama general representativo que agrupa los flujos principales de las 3 unidades. Cada actor específico tiene su interacción delimitada por el caso de uso central).*
 
