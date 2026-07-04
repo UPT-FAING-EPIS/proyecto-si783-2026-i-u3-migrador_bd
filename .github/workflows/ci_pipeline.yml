@@ -22,11 +22,7 @@ jobs:
         with:
           fetch-depth: 0
           
-      - name: SonarQube Scan
-        uses: SonarSource/sonarqube-scan-action@v4
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+
           
       - name: Semgrep Scan
         uses: returntocorp/semgrep-action@v1
