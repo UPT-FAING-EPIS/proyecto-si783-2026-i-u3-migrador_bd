@@ -22,8 +22,8 @@ jobs:
         with:
           fetch-depth: 0
           
-      - name: SonarCloud Scan
-        uses: SonarSource/sonarcloud-github-action@master
+      - name: SonarQube Scan
+        uses: SonarSource/sonarqube-scan-action@v4
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
@@ -81,8 +81,12 @@ jobs:
       - name: Run Mutation Tests (Mutmut)
         run: |
           cd proyecto-si783-2026-i-u1-migrador-de-bd-codigo-web
+          export PYTHONPATH=$(pwd)
           mutmut run || true
-          mutmut html --directory ../reports/mutation
+          pip install junit2html
+          mutmut junitxml > mutmut.xml || true
+          mkdir -p ../reports/mutation
+          junit2html mutmut.xml ../reports/mutation/index.html || true
           
       - name: Upload Reports Artifacts
         uses: actions/upload-artifact@v4
