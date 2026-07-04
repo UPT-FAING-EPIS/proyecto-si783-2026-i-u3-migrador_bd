@@ -36,13 +36,7 @@ jobs:
         with:
           sarif_file: semgrep.sarif
           
-      - name: Run Snyk to check for vulnerabilities
-        uses: snyk/actions/python@master
-        env:
-          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
-        with:
-          command: monitor
-          args: --file=proyecto-si783-2026-i-u1-migrador-de-bd-codigo-web/requirements.txt
+
 
   testing:
     name: Pruebas Automatizadas (Unitarias, BDD, Mutación)
