@@ -9,17 +9,17 @@ El proyecto "Migrador BD" es una herramienta que facilita la transformación y m
 Muestra la interacción de los actores con el sistema.
 
 ```mermaid
-usecaseDiagram
-    actor Usuario
-    actor Administrador
+flowchart LR
+    Usuario([Usuario])
+    Administrador([Administrador])
     
-    package "Sistema Migrador BD" {
-        usecase "Subir Script SQL" as UC1
-        usecase "Seleccionar Motor Destino" as UC2
-        usecase "Iniciar Migración" as UC3
-        usecase "Descargar Script Migrado" as UC4
-        usecase "Verificar Reportes" as UC5
-    }
+    subgraph Sistema Migrador BD
+        UC1(Subir Script SQL)
+        UC2(Seleccionar Motor Destino)
+        UC3(Iniciar Migración)
+        UC4(Descargar Script Migrado)
+        UC5(Verificar Reportes)
+    end
     
     Usuario --> UC1
     Usuario --> UC2
@@ -61,8 +61,8 @@ Muestra las entidades clave del backend.
 ```mermaid
 classDiagram
     class DetectorBaseDatos {
-        +detectar(ruta_archivo: str): tuple
-        -buscar_marcas_mongo(texto: str): bool
+        +detectar(ruta_archivo: str) tuple
+        -buscar_marcas_mongo(texto: str) bool
     }
     
     class CargadorDestino {
@@ -87,52 +87,44 @@ classDiagram
 Muestra los módulos físicos del software.
 
 ```mermaid
-componentDiagram
-    package "Frontend" {
-        [Interfaz de Usuario (HTML/JS)]
-    }
+flowchart TD
+    UI[Interfaz de Usuario HTML/JS]
     
-    package "Backend (Flask)" {
-        [API REST]
-        [Módulo Extracción]
-        [Módulo Transformación]
-        [Módulo Carga]
-    }
+    subgraph Backend Flask
+        API[API REST]
+        Extraccion[Módulo Extracción]
+        Transformacion[Módulo Transformación]
+        Carga[Módulo Carga]
+    end
     
-    [Interfaz de Usuario (HTML/JS)] --> [API REST] : HTTP/JSON
-    [API REST] --> [Módulo Extracción]
-    [API REST] --> [Módulo Transformación]
-    [API REST] --> [Módulo Carga]
-    [Módulo Carga] --> [Base de Datos Temporal (SQLite)]
+    BD_Temp[(Base de Datos Temporal SQLite)]
+    
+    UI <-->|HTTP/JSON| API
+    API --> Extraccion
+    API --> Transformacion
+    API --> Carga
+    Carga --> BD_Temp
 ```
 
 ### 2.5 Arquitectura de Software e Infraestructura (Despliegue)
 Muestra cómo se despliega la aplicación.
 
 ```mermaid
-deploymentDiagram
-    node "Cliente" {
-        [Navegador Web]
-    }
+flowchart TD
+    Cliente[Navegador Web]
     
-    node "Servidor de Aplicación (Ubuntu)" {
-        node "Docker Container: Web" {
-            [Gunicorn + Flask]
-        }
-        node "Docker Container: Worker" {
-            [Celery/Airflow Worker]
-        }
-    }
+    subgraph Servidor de Aplicacion Ubuntu
+        Gunicorn[Docker Container: Gunicorn + Flask]
+        Worker[Docker Container: Airflow Worker]
+    end
     
-    node "Servidor de Base de Datos" {
-        database "SQLite / MySQL" {
-            [Migraciones Temporales]
-        }
-    }
+    subgraph Servidor de Base de Datos
+        BD_Migraciones[(SQLite / MySQL Temporal)]
+    end
     
-    [Navegador Web] -- HTTPS --> [Gunicorn + Flask]
-    [Gunicorn + Flask] -- Tareas Async --> [Celery/Airflow Worker]
-    [Celery/Airflow Worker] -- Lee/Escribe --> [Migraciones Temporales]
+    Cliente <-->|HTTPS| Gunicorn
+    Gunicorn -->|Tareas Async| Worker
+    Worker <-->|Lee/Escribe| BD_Migraciones
 ```
 
 ## 3. Estrategia de Pruebas
