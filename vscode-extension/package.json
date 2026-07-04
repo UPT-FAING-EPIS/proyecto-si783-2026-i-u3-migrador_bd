@@ -1,0 +1,58 @@
+{
+  "name": "migrador-db-vscode",
+  "displayName": "Migrador DB",
+  "description": "Un sistema de migración de base de datos es el proceso de transferir datos, esquemas y configuraciones desde un entorno de almacenamiento de origen a uno de destino. Esto se realiza para modernizar infraestructura, adoptar soluciones en la nube, cambiar de motor tecnológico o consolidar centros de datos.",
+  "version": "1.0.2",
+  "publisher": "jimmyllica",
+  "engines": {
+    "vscode": "^1.80.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "activationEvents": [],
+  "main": "./out/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "migradorDb.migrateFile",
+        "title": "Migrar con Migrador DB"
+      }
+    ],
+    "menus": {
+      "explorer/context": [
+        {
+          "command": "migradorDb.migrateFile",
+          "group": "navigation"
+        }
+      ]
+    },
+    "configuration": {
+      "title": "Migrador DB",
+      "properties": {
+        "migradorDb.apiUrl": {
+          "type": "string",
+          "default": "http://178.238.228.92:100",
+          "description": "URL base de la API del servidor Migrador DB (ej. http://178.238.228.92:100)"
+        }
+      }
+    }
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "pretest": "npm run compile && npm run lint",
+    "lint": "eslint src --ext ts",
+    "test": "node ./out/test/runTest.js"
+  },
+  "devDependencies": {
+    "@types/vscode": "^1.80.0",
+    "@types/node": "18.x",
+    "typescript": "^5.1.3"
+  },
+  "dependencies": {
+    "axios": "^1.6.0",
+    "form-data": "^4.0.0"
+  }
+}

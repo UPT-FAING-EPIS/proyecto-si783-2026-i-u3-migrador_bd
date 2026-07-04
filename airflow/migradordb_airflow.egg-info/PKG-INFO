@@ -1,0 +1,17 @@
+Metadata-Version: 2.4
+Name: migradordb-airflow
+Version: 1.0.0
+Summary: Apache Airflow Operator for Migrador DB Enterprise. Un sistema de migración de base de datos es el proceso de transferir datos, esquemas y configuraciones desde un entorno de almacenamiento de origen a uno de destino. Esto se realiza para modernizar infraestructura, adoptar soluciones en la nube, cambiar de motor tecnológico o consolidar centros de datos.
+Author: MigradorDB Team
+Classifier: Programming Language :: Python :: 3
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Operating System :: OS Independent
+Classifier: Framework :: Apache Airflow
+Requires-Python: >=3.7
+Requires-Dist: apache-airflow>=2.0.0
+Requires-Dist: requests>=2.25.0
+Dynamic: author
+Dynamic: classifier
+Dynamic: requires-dist
+Dynamic: requires-python
+Dynamic: summary

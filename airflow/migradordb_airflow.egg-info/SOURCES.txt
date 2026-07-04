@@ -1,0 +1,9 @@
+README.md
+setup.py
+migradordb_airflow/__init__.py
+migradordb_airflow/migradordb_operator.py
+migradordb_airflow.egg-info/PKG-INFO
+migradordb_airflow.egg-info/SOURCES.txt
+migradordb_airflow.egg-info/dependency_links.txt
+migradordb_airflow.egg-info/requires.txt
+migradordb_airflow.egg-info/top_level.txt
