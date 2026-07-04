@@ -58,7 +58,7 @@ def ejecutar_migracion_background(job_id: str, ruta_archivo: str, nombre_archivo
             _update_job_status(job_id, {"status": "error", "mensaje": "El archivo origen no contiene tablas válidas."})
             return
 
-        destino = CargadorDestino(motor=motor_destino)
+        destino = CargadorDestino(motor_destino)
         if origen.esquema:
             destino.crear_estructura(origen.esquema)
             

@@ -2,7 +2,6 @@ import os
 import time
 import requests
 from airflow.models.baseoperator import BaseOperator
-from airflow.utils.decorators import apply_defaults
 from airflow.exceptions import AirflowException
 
 class MigradorDBOperator(BaseOperator):
@@ -12,7 +11,6 @@ class MigradorDBOperator(BaseOperator):
     espera asíncronamente a que termine el procesamiento y descarga el script/archivo migrado.
     """
 
-    @apply_defaults
     def __init__(
         self,
         source_file_path: str,

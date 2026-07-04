@@ -29,10 +29,10 @@ start_task = DummyOperator(
 # Este ejemplo asume que hay un archivo SQLite que queremos migrar a PostgreSQL
 run_migration_task = MigradorDBOperator(
     task_id='migrate_sqlite_to_postgres',
-    source_file_path='/opt/airflow/data/db_origen.sqlite',
+    source_file_path=r'C:\Users\Usuario\proyecto-si783-2026-i-u3-migrador_bd\test.sqlite',
     target_engine='PostgreSQL',
-    output_file_path='/opt/airflow/data/outputs/migracion_diaria.sql',
-    api_base_url='http://migrador-db-web:5000', # URL del servidor donde corre Migrador DB
+    output_file_path=r'C:\Users\Usuario\proyecto-si783-2026-i-u3-migrador_bd\migracion_diaria.sql',
+    api_base_url='http://127.0.0.1:5000', # URL del servidor donde corre Migrador DB
     poll_interval_seconds=10,
     dag=dag,
 )
