@@ -501,6 +501,174 @@ El sistema está organizado en los siguientes paquetes/módulos:
 | foto_url | TEXT | | URL de foto del proveedor |
 | creado_en | TIMESTAMP | DEFAULT CURRENT_TIMESTAMP | Fecha de vinculación |
 
+#### C. Diagrama de Despliegue
+
+```plantuml
+@startuml
+node "Cliente / Entorno Local" {
+  [Navegador Web] as web
+  [Visual Studio Code] as vsc
+  [Apache Airflow] as airflow
+}
+
+node "Servidor de Producción (VPS)" {
+  [Nginx (Proxy Reverso)] as nginx
+  
+  node "Aplicación Flask" {
+    [Gunicorn] as gunicorn
+    [Controlador REST / WS] as api
+  }
+}
+
+database "Almacenamiento Local" {
+  [SQLite auth.db] as authdb
+  [Archivos Temporales] as temporales
+}
+
+web --> nginx : HTTP / WS
+vsc --> nginx : HTTP REST API
+airflow --> nginx : HTTP REST API
+
+nginx --> gunicorn
+gunicorn --> api
+api --> authdb
+api --> temporales
+@enduml
+```
+
+#### D. Casos de Uso
+
+**Diagrama de Casos de Uso General:**
+```plantuml
+@startuml
+left to right direction
+actor "Usuario Regular" as User
+actor "Administrador" as Admin
+actor "Ingeniero Datos (Airflow)" as Airflow
+actor "Desarrollador (VS Code)" as Dev
+
+package "Migrador DB Enterprise" {
+  usecase "CU-03: Iniciar sesión" as Login
+  usecase "CU-05: Subir archivo BD" as Upload
+  usecase "CU-08: Ejecutar migración web" as MigrateWeb
+  usecase "CU-12: Gestionar usuarios" as ManageUsers
+  usecase "CU-16: Migración programada" as MigrateAirflow
+  usecase "CU-17: Migración desde IDE" as MigrateVSCode
+}
+
+User --> Login
+User --> Upload
+User --> MigrateWeb
+Admin --> ManageUsers
+Admin -|> User
+
+Airflow --> MigrateAirflow
+Dev --> MigrateVSCode
+@enduml
+```
+
+*(Nota: Se incluye un diagrama general representativo que agrupa los flujos principales de las 3 unidades. Cada actor específico tiene su interacción delimitada por el caso de uso central).*
+
+#### E. Modelo Lógico
+
+**a. Análisis de Objetos**
+```plantuml
+@startuml
+object "archivo_subido : ArchivoBD" as archivo {
+  nombre = "datos_ventas.sqlite"
+  tamaño = "15 MB"
+}
+
+object "motor_detectado : MotorOrigen" as motor_origen {
+  tipo = "SQLite"
+  tablas = 5
+}
+
+object "etl : PipelineMigracion" as pipeline {
+  estado = "En progreso"
+  destino = "PostgreSQL"
+}
+
+archivo --> motor_origen : analizado por
+motor_origen --> pipeline : entra a
+@enduml
+```
+
+**b. Diagrama de Actividades**
+```plantuml
+@startuml
+start
+:Recibir archivo de BD;
+:Detectar motor de origen;
+if (¿Es soportado?) then (Sí)
+  :Extraer esquema;
+  :Extraer datos;
+  :Usuario/API selecciona destino;
+  :Transformar datos (Tipos/Nombres);
+  :Generar script/archivo destino;
+  :Devolver archivo al usuario/cliente;
+else (No)
+  :Retornar error de motor no soportado;
+endif
+stop
+@enduml
+```
+
+**c. Diagrama de Secuencia**
+```plantuml
+@startuml
+actor Cliente as "Cliente\n(Web/IDE/Airflow)"
+boundary API as "API / Rutas"
+control ETL as "Pipeline ETL"
+database Almacenamiento as "Storage Local"
+
+Cliente -> API : Enviar archivo BD
+API -> ETL : Iniciar procesamiento
+ETL -> ETL : Detectar motor
+ETL -> API : Devolver metadata/motor
+Cliente -> API : Confirmar destino
+API -> ETL : Iniciar migración
+ETL -> Almacenamiento : Leer/Escribir temporal
+ETL -> ETL : Transformar y Cargar
+ETL -> API : Archivo final generado
+API -> Cliente : Enviar archivo resultante
+@enduml
+```
+
+**d. Diagrama de Clases**
+```plantuml
+@startuml
+class Usuario {
+  +int id
+  +String email
+  +String rol
+  +login()
+}
+
+class DetectorBaseDatos {
+  +String filepath
+  +detectar_motor() : String
+}
+
+class PipelineETL {
+  +String origen
+  +String destino
+  +extraer()
+  +transformar()
+  +cargar()
+}
+
+class Exportador {
+  +generar_sql()
+  +generar_json()
+}
+
+Usuario "1" --> "*" PipelineETL : inicia
+PipelineETL --> "1" DetectorBaseDatos : usa
+PipelineETL --> "1" Exportador : finaliza con
+@enduml
+```
+
 ---
 
 <span id="conclusiones-srs"></span>
